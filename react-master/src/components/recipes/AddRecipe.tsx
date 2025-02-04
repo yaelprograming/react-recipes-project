@@ -1,9 +1,8 @@
  import { yupResolver } from "@hookform/resolvers/yup";
-import { Box, Button, Divider, dividerClasses, IconButton, TextField, Typography } from "@mui/material";
+import { Box, Button, Divider, IconButton, TextField, Typography } from "@mui/material";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { array,  object, string } from "yup";
 import { addRecipe, Recipe } from "./RecipesStore";
-import { AsyncThunkAction, ThunkDispatch, UnknownAction } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../reduxStore";
 export enum Difficulty {
@@ -26,7 +25,6 @@ const schema = object({
         object({ name: string().required("Ingredient is required") })
     ).min(1, "At least one ingredient is required"),
 }).required();
-
     
     const AddRecipe = ({ addToList }: { addToList: Function }) => {
         const dispatch = useDispatch<AppDispatch>();
@@ -36,7 +34,7 @@ const schema = object({
 
     const { fields, append, remove } = useFieldArray({
         control,
-        name: "ingredients", // שם השדה במודל
+        name: "ingredients", 
     });
 
     const onSubmit = (data: RecipeType) => {
@@ -45,52 +43,19 @@ const schema = object({
             description: data.description,
             ingredients: data.ingredients.map(i => i.name),
             instructions:"fghjk",
-
-            // authorId: 0,  // כאן אתה צריך לוודא שאתה שולח את ה-userId אם יש
         };    
-        dispatch(addRecipe(newRecipe));  // שליחה ל-Redux
+        dispatch(addRecipe(newRecipe)); 
         reset();
     };
 
     return (
         <>
-            {/* <form onSubmit={handleSubmit(onSubmit)}>
-                <label>הכנס כותרת למתכון</label>
-                <br />
-                <input {...register("title")}></input>
-                <br />
-                {errors.title && <div>{errors.title.message}</div>}
-                <br />
-                <label>נסה לגרות אותנו</label>
-<br />
-                <input {...register("description")}></input>
-                {errors.description && <div>{errors.description.message}</div>}
-                <br />
-                <label>הכנס את רשימת החומרים הדרושים</label>
-            {fields.map((item, index) => (
-                <div key={item.id}>
-                    <input {...register(`ingredients[${index}].name`)} placeholder={`חומר #${index + 1}`} />
-                    <button type="button" onClick={() => remove(index)}>הסרת חומר</button>
-                </div>
-            ))}
-            <button type="button" onClick={() => append({name:""})}>הוסף חומר</button>
-            {errors.ingredients && <div>{errors.ingredients.message}</div>}
-                <br />
-                <label>תאר את אופן ההכנה</label>
-                <br />
-                <br />
-<button type="submit">שלח לתנור...:)</button>
-            </form>
-*/}
-
-<Box sx={{ maxWidth: '100%', margin: '0 auto', padding: 4, backgroundColor: '#F4F1F0', borderRadius: 2 }}>
+<Box sx={{ maxWidth: '100%', margin: '0 auto', marginTop: 4,padding: 4, backgroundColor: '#F4F1F0', borderRadius: 2 }}>
       <Typography variant="h4" gutterBottom sx={{ textAlign: 'center', color: '#6E4B3A' }}>
         הוסף מתכון חדש
       </Typography>
       
       <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-        
-        {/* כותרת המתכון */}
         <Controller
           name="title"
           control={control}
@@ -106,8 +71,6 @@ const schema = object({
             />
           )}
         />
-
-        {/* תיאור המתכון */}
         <Controller
           name="description"
           control={control}
@@ -125,8 +88,6 @@ const schema = object({
             />
           )}
         />
-
-        {/* חומרים */}
         <Typography variant="h6" sx={{ color: '#6E4B3A' }}>החומרים</Typography>
         {fields.map((item, index) => (
           <Box key={item.id} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -157,15 +118,11 @@ const schema = object({
         >
           הוסף חומר
         </Button>
-
-        {/* שגיאות חומרים */}
         {errors.ingredients && (
           <Typography color="error" variant="body2">יש למלא את כל החומרים</Typography>
         )}
 
         <Divider sx={{ marginY: 2 }} />
-
-        {/* אופן הכנה */}
         <Controller
           name="instructions"
           control={control}
@@ -181,8 +138,6 @@ const schema = object({
             />
           )}
         />
-
-        {/* כפתור שליחה */}
         <Button
           type="submit"
           variant="contained"
@@ -201,5 +156,4 @@ const schema = object({
         </> 
     )
 }
-
 export default AddRecipe

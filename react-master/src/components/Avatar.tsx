@@ -1,10 +1,7 @@
 import { useContext } from "react";
 import Avatar from '@mui/material/Avatar';
-import { deepPurple} from '@mui/material/colors';
 import { Box, Stack } from "@mui/material";
 import { currentContext } from "./User";
-// import { deepOrange } from "@mui/material/colors";
-
 
 const LetterAvatar=() =>{
   const context=useContext(currentContext)
@@ -15,18 +12,18 @@ const LetterAvatar=() =>{
         f+=context.currentUser.lastName[0]
     }
   return (
-    
     <Stack direction="row" spacing={2}>
            <Box 
             position="absolute" 
-            top={0} 
-            left={0} 
-            sx={{ padding: '16px' }} // הוסף סגנונות נוספים לפי הצורך
+            top={-4} 
+            left={4} 
+            sx={{ padding: '10px' }}
         >
-            <Avatar sx={{ bgcolor: deepPurple[700] }} >{f}</Avatar>
+            <Avatar sx={{ bgcolor:"#8D6E63" , width: 40, height: 40,border: "3px solid #6D4C41",
+               transition: "0.3s","&:hover": { transform: "scale(1.1)", boxShadow: "4px 4px 15px rgba(0, 0, 0, 0.3)" }
+            }} >{f}</Avatar>
         </Box>      
     </Stack>
-    
   );
 }
 

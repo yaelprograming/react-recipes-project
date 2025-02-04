@@ -10,9 +10,9 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
+  bgcolor: "#D7CCC8",
+  borderRadius: "12px",
+  boxShadow: "4px 4px 15px rgba(0, 0, 0, 0.2)",
   p: 4,
   zIndex:1400
 };
@@ -22,14 +22,13 @@ const Update = () => {
   const lNameRef = useRef<HTMLInputElement>(null)
   const fNameRef = useRef<HTMLInputElement>(null)
   const addressRef = useRef<HTMLInputElement>(null)
-  //const emailRef = useRef<HTMLInputElement>(null)
   const phoneRef = useRef<HTMLInputElement>(null)
   const [user, setUser] = useState({})
   const handleSubmit = async (e:React.FormEvent) => {  
     e.preventDefault()
     if (!context?.currentUser?.id) {
       console.error("User ID is missing!");
-      return; // אם ה-ID לא קיים, אל תשלח את הבקשה
+      return; 
   }
     try{
       console.log("id!!!!! :"+context?.currentUser.id)
@@ -45,12 +44,12 @@ const Update = () => {
        
        } , {
         headers: {
-            'user-id':context?.currentUser.id // Ensure you replace '123' with the actual user ID as needed
+            'user-id':context?.currentUser.id 
         }
     }); 
        setUser(res.data.user) 
     
-       context?.dispatch({ type: 'UPDATE', new_data: {id:context.currentUser.id, firstName:fNameRef.current?.value||'', lastName: lNameRef.current?.value || '', passward: context.currentUser.passward, email: context.currentUser.email, address: addressRef.current?.value || '', phone: phoneRef.current?.value || '' } })
+       context?.userDispatch({ type: 'UPDATE', new_data: {id:context.currentUser.id, firstName:fNameRef.current?.value||'', lastName: lNameRef.current?.value || '', passward: context.currentUser.passward, email: context.currentUser.email, address: addressRef.current?.value || '', phone: phoneRef.current?.value || '' } })
        setIsClicked(false)
     
       } catch (error) {
@@ -62,10 +61,22 @@ const Update = () => {
       <>
         {<Box
           position="absolute"
-          top={0}
-          left={40}
-          sx={{ padding: '16px' }} // הוסף סגנונות נוספים לפי הצורך
-        ><Button onClick={() => setIsClicked(true)}>update-details</Button>
+          top={10}
+          left={70}
+          sx={{ width:"" }} 
+        ><Button
+        sx={{
+          backgroundColor: "#8D6E63", 
+          color: "white",
+          fontSize: "14px",
+          padding: "6px 12px", 
+          borderRadius: "8px", 
+          textTransform: "none",
+          "&:hover": {
+            backgroundColor: "#6D4C41", 
+          }
+        }}
+         onClick={() => setIsClicked(true)}>update</Button>
         </Box>}
         <Modal
           open={isClicked}
@@ -77,21 +88,11 @@ const Update = () => {
           <TextField type="text" inputRef={fNameRef} placeholder="firstName" />
           <TextField type="text" inputRef={lNameRef} placeholder="lastName" />
             <TextField type="text" inputRef={addressRef} placeholder="address" />
-            {/* <TextField type="text" inputRef={emailRef} placeholder="email" /> */}
             <TextField type="text" inputRef={phoneRef} placeholder="phone" />
             <Button onClick={handleSubmit}>save</Button>
           </Box>
         </Modal>
-        {/* {isClicked==false&& <button  onClick={()=>setIsClicked(true)}>update</button>} */}
-        {/* {isClicked&&
-           <form>
-               <input type="text" ref={lNameRef} placeholder="lastName"/>
-               <input type="text" ref={addressRef} placeholder="address"/>
-               <input type="text" ref={emailRef} placeholder="email"/>
-               <input type="text" ref={phoneRef} placeholder="phone"/>
-               <button onClick={handleSubmit}>save</button>   
-           </form>
-           } */}
+        
       </>
     )
   }

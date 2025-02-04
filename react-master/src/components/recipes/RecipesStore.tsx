@@ -3,7 +3,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { RootStore } from '../../reduxStore';
-// import { Difficulty } from './AddRecipe';
 
 export type Recipe = {
     id: number;
@@ -11,8 +10,6 @@ export type Recipe = {
     description: string;
     authorId: number;
     ingredients: string[];
-
-    // difficulty:  "קל" | "בינוני" | "קשה" 
 }
 export const fetchRecipes = createAsyncThunk('recipes/fetch', async (_, thunkApi) => {
     try {
@@ -77,6 +74,5 @@ const recipesSlice = createSlice({
     }
 });
 export const selectRecipes = (state: RootStore) => state.recipes;
-export const { actions } = recipesSlice; // ייצוא הפעולות
-// export const { fetchRecipes, addRecipe } = actions; // ייצוא הפעולות הספציפיות
+export const { actions } = recipesSlice; 
 export default recipesSlice;

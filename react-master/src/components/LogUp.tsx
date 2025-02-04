@@ -1,84 +1,73 @@
-import { Box, Button, Modal, TextField, Typography } from "@mui/material"
-import { createContext, FormEvent, useContext, useRef, useState } from "react"
-import axios from "axios"
+import { Box, Button, Modal, TextField, Typography } from "@mui/material";
+import { FormEvent, useContext, useRef, useState } from "react";
+import axios from "axios";
 import { currentContext } from "./User";
-import zIndex from "@mui/material/styles/zIndex";
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-  zIndex:1400
-};
+const LogUp = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const context = useContext(currentContext);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
 
-const LogUp = ({ IsOpen }: { IsOpen: Function }) => {
-  const [isClicked, setIsClicked] = useState(false)
-  const context = useContext(currentContext)
-  // const [id,setId]=useContext(userIdRes)
-  //const fNameRef=useRef<HTMLInputElement>(null)
- // const fNameRef = useRef<HTMLInputElement>(null)
-  const emailRef = useRef<HTMLInputElement>(null)
-  const passwardREf = useRef<HTMLInputElement>(null)
-  const [user, setUser] = useState({})
   const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:3000/api/user/register',
-        {
-          email: emailRef.current?.value,
-          password: passwardREf.current?.value
+      const res = await axios.post("http://localhost:3000/api/user/register", {
+        email: emailRef.current?.value,
+        password: passwordRef.current?.value,
+      });
 
-        })
-      setUser(res.data.user)
+      context?.userDispatch({
+        type: "CREATE",
+        new_data: {
+          id: res.data.userId,
+          firstName: "",
+          lastName: "",
+          passward: passwordRef.current?.value || "",
+          email: emailRef.current?.value || "",
+          address: "",
+          phone: "",
+        },
+      });
 
-      IsOpen()
-      context?.dispatch({ type: 'CREATE', new_data: { id: res.data.userId, firstName: '', lastName: '', passward: passwardREf.current?.value || '', email: emailRef.current?.value||'', address: '', phone: '' } })
-      //setIsClicked(false)
-      //  const g:String=(res.data.user.id)
+      setIsOpen(false);
+    } catch (e) {
+      alert("שגיאה בהרשמה! נסי שוב.");
     }
-    catch (e) {
-      if (e.response) {
-        console.error('Error response:', e.response.data);
-    } else {
-        console.error('Error', e.message);
-    }
-    }
-
-    if (context) {
-      //if(context.currentUser.firstName==fNameRef.current?.value&&context.currentUser.passward==passwardREf.current?.value)
-
-    }
-
-  }
-
+  };
 
   return (
     <>
-      {/* {isClicked==false&& <button  onClick={()=>setIsClicked(true)}>login</button>} */}
+      <Button variant="outlined" sx={{ borderColor: "white", color: "white" }} onClick={() => setIsOpen(true)}>
+        Sign Up
+      </Button>
 
-      <Button style={{ position: 'absolute', top: 10, left: 100 }} onClick={() => setIsClicked(true)}>Sign up </Button>
-      {/* { isClicked==false&&<Button style={{ position: 'absolute', top: 10, left: 100 }} onClick={()=>setIsClicked(true)}>LogUp </Button>} */}
-      <Modal
-        open={isClicked}
-        onClose={() => setIsClicked(false)}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <TextField type="email" inputRef={emailRef} placeholder="email" />
-          <TextField type="password" inputRef={passwardREf} placeholder="passward" />
-          <Button onClick={handleSubmit}>CREATE</Button>
+      <Modal open={isOpen} onClose={() => setIsOpen(false)}>
+        <Box sx={modalStyle}>
+          <Typography variant="h5" sx={{ fontWeight: "bold", mb: 2, color: "#6D4C41" }}>הרשמה</Typography>
+          <TextField type="email" inputRef={emailRef} placeholder="אימייל" fullWidth sx={{ mb: 2, bgcolor: "white" }} />
+          <TextField type="password" inputRef={passwordRef} placeholder="סיסמה" fullWidth sx={{ mb: 2, bgcolor: "white" }} />
+          <Button variant="contained" sx={{ backgroundColor: "#8D6E63", "&:hover": { backgroundColor: "#6D4C41" } }} fullWidth onClick={handleSubmit}>
+            הירשם
+          </Button>
         </Box>
       </Modal>
-    </>)
+    </>
+  );
+};
+
+const modalStyle = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "#FAF3E0",
+  boxShadow: 24,
+  p: 4,
+  borderRadius: 2,
+};
+
+export default LogUp;
 
 
-
-}
-export default LogUp

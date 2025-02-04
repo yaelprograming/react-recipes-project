@@ -1,42 +1,66 @@
-import { AppBar, Box, Button, IconButton, Menu, MenuItem, Toolbar, Typography } from "@mui/material";
-import { useContext, useState } from "react";
-import { Link } from "react-router"
+import { AppBar, Toolbar,  Box,  MenuItem } from "@mui/material";
+import { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { currentContext } from "./User";
-import React from "react";
-import MenuIcon from '@mui/material/IconButton';
-
+import LogIn from "./LogIn";
+import LogUp from "./LogUp";
+import LetterAvatar from "./Avatar";
+import Update from "./UpDate";
 
 const NavBar = () => {
+  const context = useContext(currentContext);
+  const isLoggedIn = !!context?.currentUser?.id;
+  const [userLoggedIn, setUserLoggedIn] = useState(isLoggedIn);
 
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
+  const handleMenuClose = () => setAnchorEl(null);
 
-  // const context = useContext(currentContext);  // מתחברים לקונטקסט של המשתמש
-  // console.log(context)
+  useEffect(() => {
+    setUserLoggedIn(isLoggedIn); 
+  }, [isLoggedIn]);
+  
+  return (
+<>
+<AppBar position="fixed" sx={{ backgroundColor: "#4e342e" }}>
+  <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+    
+    <Box sx={{ display: "flex", gap: 2 }}>
+      <MenuItem component={Link} to="/">בית</MenuItem>
+      <MenuItem component={Link} to="/RecipesList">מתכונים</MenuItem>
+      <MenuItem component={Link} to="/about">אודות</MenuItem>
+      {context?.currentUser?.id && <MenuItem component={Link} to="/AddRecipe">הוסף מתכון</MenuItem>}
+    </Box>
 
-  // const isLoggedIn = context?.currentUser !== null;
-  // console.log(`isLoggedIn${isLoggedIn}`)
-
-
-  //שלי
-  return (<>
-    <nav>
-      <Box display="flex" justifyContent="flex-first" p={2} sx={{ position: 'fixed', top: 0, right: 0,  zIndex: 1301,color: "#6D4C41",background:"#4e342e", boxShadow: 2 }} >
-        <Link to='/'>Home</Link>   ||
-        <Link to='/RecipesList'>Recipes</Link> ||
-        {/* <Link to='/AddRecipe'>AddRecipe</Link> */}
+    {!context?.currentUser?.id ? (
+      <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+        <LogIn />
+        <LogUp />
       </Box>
-    </nav>
-  </>)
+    ) : null}
+  </Toolbar>
+</AppBar>
 
+{context?.currentUser?.id && (
+  <Box sx={{
+    position: "absolute",  
+    top: 10, 
+    right: 220, 
+    display: "flex",
+    alignItems: "center",
+    gap: 2,
+    backgroundColor: "white", 
+    padding: "8px",
+    borderRadius: "8px",
+    boxShadow: "2px 2px 10px rgba(0,0,0,0.1)", 
+    zIndex: 10000
+  }}>
+    <LetterAvatar />
+    <Update />
+  </Box>
+)}
+</>
+  );
+};
 
-
-
-
-}
 export default NavBar;

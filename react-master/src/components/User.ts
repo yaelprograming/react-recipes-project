@@ -9,16 +9,18 @@ export type User={
     address:string,
     phone:string
 }
-export type reducerType={
-    currentUser:User,
-    dispatch:React.Dispatch<Action>
-}
-export const currentContext=createContext<reducerType|null>(null)
-export const userIdRes=createContext<string>('')
+
 export type Action={
     type:'CREATE'|'UPDATE'|'GET'|'REMOVE',
     new_data:User
 }
+
+export type reducerType={
+    currentUser:User,
+    userDispatch:React.Dispatch<Action>
+}
+export const currentContext=createContext<reducerType|null>(null)
+
 export const userReducer=(current:User,action:Action)=>{
     switch(action.type)
     {

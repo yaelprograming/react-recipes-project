@@ -19,26 +19,24 @@ const RecipesLayout = () => {
                         right: 0,
                         height: 'calc(100vh - 72px)',
                         overflowY: 'auto',
-                        
-                        paddingRight: '20px',
+                        paddingRight: '10px',
                         zIndex: 1,
-                        backgroundColor: '#FFF',  // ניתן להוסיף צבע רקע לרשימה
-                        borderLeft: '1px solid #ddd' // קו גבול בין הרשימה לתוכן
+                        backgroundColor: '#FFF',  
+                        borderLeft: '1px solid #ddd' 
                     }}
                 >
                     <RecipesList />
                 </Grid>
-    
                 <Grid
                     item
                     xs={9}
                     style={{
                         marginLeft: 'auto',
                         marginRight: 'auto',
-                        paddingLeft: '20px', // ריווח בין התוכן לבין צד ימין
+                        paddingLeft: '20px', 
                         paddingRight: '20px',
                         maxWidth: '80%',
-                        position: 'relative', // כדי שלא יהיה תקלות עם הפוזיציה של צד ימין
+                        position: 'relative', 
                         zIndex: 0
                     }}
                 >
